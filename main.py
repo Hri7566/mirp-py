@@ -43,6 +43,8 @@ def main():
         if message is None:
             continue
 
+        print(message)
+
         status = message[0][0]
         note_index = message[0][1] - 36
 
@@ -58,6 +60,18 @@ def main():
                 print("New index: " + str(note_index + 15))
                 key = extra_keys.get(note_index + 15)
 
+        if status == 0xB0:
+            try:
+                keyboard.press("'")
+                keyboard.release("'")
+            except TypeError:
+                continue
+            except StopIteration:
+                continue
+            except ValueError:
+                continue
+
+
         if status == 0x90:
             try:
                 print("pressing " + key)
@@ -66,7 +80,7 @@ def main():
                         keyboard.press('control')
                     keyboard.press('shift')
                     keyboard.press(key.lower())
-                    keyboard.release(key.lower())
+                    #keyboard.release(key.lower())
                     keyboard.release('shift')
                     if is_wide == True:
                         keyboard.release('control')
@@ -77,6 +91,35 @@ def main():
                     if is_wide == True:
                         keyboard.press('control')
                     keyboard.press(key.lower())
+                    #keyboard.release(key.lower())
+                    if is_wide == True:
+                        keyboard.release('control')
+            except TypeError:
+                continue
+            except StopIteration:
+                continue
+            except ValueError:
+                continue
+
+        if status == 0x80:
+            try:
+                print("releasing " + key)
+                if not key.isnumeric() and key == key.upper():
+                    if is_wide == True:
+                        keyboard.press('control')
+                    keyboard.press('shift')
+                    #keyboard.press(key.lower())
+                    keyboard.release(key.lower())
+                    keyboard.release('shift')
+                    if is_wide == True:
+                        keyboard.release('control')
+                    # keyboard.press_and_release("shift+" + key.lower())
+                else:
+                    #print("using write")
+                    #keyboard.write(key)
+                    if is_wide == True:
+                        keyboard.press('control')
+                    #keyboard.press(key.lower())
                     keyboard.release(key.lower())
                     if is_wide == True:
                         keyboard.release('control')
@@ -86,7 +129,6 @@ def main():
                 continue
             except ValueError:
                 continue
-            
 
 
 if __name__ == "__main__":
